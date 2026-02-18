@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-const orderRouter = Router();
+const healthcheckRouter = Router();
 
-orderRouter.post("/v1/healthcheck", async (_req, res) => {
+healthcheckRouter.get("/", async (_req, res) => {
   try {
     const body = {
       status: "ok",
@@ -15,4 +15,4 @@ orderRouter.post("/v1/healthcheck", async (_req, res) => {
   }
 });
 
-export default orderRouter;
+export default healthcheckRouter;
