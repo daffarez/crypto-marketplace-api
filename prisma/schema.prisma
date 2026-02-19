@@ -31,11 +31,22 @@ model Order {
   id             String   @id @default(uuid())
   userId         String
   itemId         String
-  idempotencyKey String?  @unique
-  status         String   @default("PENDING")
+  status         OrderStatus @default(PENDING)
+  idempotencyKey String   @unique
   blockchainTx   String?
+  paymentAddress String?
+  expiredAt      DateTime?
   createdAt      DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
   item Item @relation(fields: [itemId], references: [id])
+}
+
+enum OrderStatus {
+  PENDING
+  WAITING_PAYMENT
+  PAID
+  CONFIRMED
+  FAILED
+  EXPIRED
 }

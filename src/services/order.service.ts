@@ -1,6 +1,7 @@
 import { Order } from "@prisma/client";
 import { prisma } from "../db/prisma.js";
 import { CreateOrderDTO } from "../validators/order.validator.js";
+import { addMinutes } from "date-fns";
 
 type CreateOrderResult = {
   order: Order;
@@ -15,6 +16,10 @@ export const createOrder = async (
     where: { idempotencyKey: key },
   });
   if (existing) return { order: existing, created: false };
+
+  // fake address
+  const paymentAddress =
+    "0x" + crypto.randomUUID().replace(/-/g, "").slice(0, 40);
 
   const user = await prisma.user.findUnique({
     where: { id: data.userId },
@@ -33,7 +38,9 @@ export const createOrder = async (
       userId: data.userId,
       itemId: data.itemId,
       idempotencyKey: key,
-      status: "PENDING",
+      status: "WAITING_PAYMENT",
+      paymentAddress,
+      expiredAt: addMinutes(new Date(), 15),
     },
   });
 
