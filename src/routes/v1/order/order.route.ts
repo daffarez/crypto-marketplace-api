@@ -4,7 +4,7 @@ import { createOrder } from "../../../services/order.service.js";
 
 const orderRouter = Router();
 
-orderRouter.post("/", async (req, res) => {
+orderRouter.post("/create", async (req, res) => {
   try {
     const body = createOrderSchema.parse(req.body);
 
