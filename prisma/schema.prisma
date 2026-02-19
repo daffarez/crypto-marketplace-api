@@ -28,12 +28,13 @@ model Item {
 }
 
 model Order {
-  id           String   @id @default(uuid())
-  userId       String
-  itemId       String
-  status       String   @default("PENDING")
-  blockchainTx String?
-  createdAt    DateTime @default(now())
+  id             String   @id @default(uuid())
+  userId         String
+  itemId         String
+  idempotencyKey String?  @unique
+  status         String   @default("PENDING")
+  blockchainTx   String?
+  createdAt      DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id])
   item Item @relation(fields: [itemId], references: [id])

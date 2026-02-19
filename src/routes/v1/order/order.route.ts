@@ -1,14 +1,17 @@
 import { Router } from "express";
-import { createOrderSchema } from "../../../validators/order.validator.js";
+import { CreateOrderSchema } from "../../../validators/order.validator.js";
 import { createOrder } from "../../../services/order.service.js";
 
 const orderRouter = Router();
 
 orderRouter.post("/create", async (req, res) => {
   try {
-    const body = createOrderSchema.parse(req.body);
+    const key = req.header("Idempotency-Key");
+    if (!key) throw new Error("Idempotency-Key required");
 
-    const order = await createOrder(body.userId, body.itemId);
+    const body = CreateOrderSchema.parse(req.body);
+
+    const order = await createOrder(body, key);
 
     res.status(201).json(order);
   } catch (err: any) {
