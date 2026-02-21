@@ -1,7 +1,8 @@
 import { Order } from "@prisma/client";
-import { prisma } from "../db/prisma.js";
+import { prisma } from "../db/client.js";
 import { CreateOrderDTO } from "../validators/order.validator.js";
 import { addMinutes } from "date-fns";
+import { orderQueue } from "../lib/bullmq/client.js";
 
 type CreateOrderResult = {
   order: Order;
@@ -43,6 +44,15 @@ export const createOrder = async (
       expiredAt: addMinutes(new Date(), 15),
     },
   });
+
+  await orderQueue.add(
+    "expire-order",
+    { orderId: order.id },
+    {
+      delay: 15 * 60 * 1000,
+      jobId: order.id,
+    },
+  );
 
   return { order, created: true };
 };
