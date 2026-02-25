@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { CreateOrderSchema } from "../../../validators/order.validator.js";
+import { CreateOrderSchema } from "../../../schemas/order.schema.js";
 import { createOrder } from "../../../services/order.service.js";
 
 const orderRouter = Router();

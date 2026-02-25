@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { registerUser } from "../../../services/user.service.js";
-import { registerUserSchema } from "../../../validators/user.validator.js";
+import { registerUserSchema } from "../../../schemas/user.schema.js";
 
 const userRouter = Router();
 

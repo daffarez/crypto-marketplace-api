@@ -28,15 +28,15 @@ model Item {
 }
 
 model Order {
-  id             String   @id @default(uuid())
+  id             String      @id @default(uuid())
   userId         String
   itemId         String
   status         OrderStatus @default(PENDING)
-  idempotencyKey String   @unique
+  idempotencyKey String      @unique
   blockchainTx   String?
   paymentAddress String?
   expiredAt      DateTime?
-  createdAt      DateTime @default(now())
+  createdAt      DateTime    @default(now())
 
   user User @relation(fields: [userId], references: [id])
   item Item @relation(fields: [itemId], references: [id])
@@ -49,4 +49,12 @@ enum OrderStatus {
   CONFIRMED
   FAILED
   EXPIRED
+}
+
+model BlockchainTransaction {
+  hash      String   @id
+  toAddress String
+  amount    Decimal
+  confirmed Boolean  @default(true)
+  createdAt DateTime @default(now())
 }

@@ -1,6 +1,6 @@
 import { Order } from "@prisma/client";
 import { prisma } from "../db/client.js";
-import { CreateOrderDTO } from "../validators/order.validator.js";
+import { CreateOrderDTO } from "../schemas/order.schema.js";
 import { addMinutes } from "date-fns";
 import { orderQueue } from "../lib/bullmq/client.js";
 
